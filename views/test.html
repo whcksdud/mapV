@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload and Visualize CSV</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+  <h2>Upload CSV File</h2>
+  <form id="upload-form" enctype="multipart/form-data">
+    Select CSV file to upload:
+    <input type="file" name="csvfile">
+    <br>
+    Select elements to visualize:
+    <input type="checkbox" name="elements[]" value="Cd"> Cd
+    <input type="checkbox" name="elements[]" value="Cu"> Cu
+    <input type="checkbox" name="elements[]" value="As"> As
+    <input type="checkbox" name="elements[]" value="Pb"> Pb
+    <input type="checkbox" name="elements[]" value="Zn"> Zn
+    <input type="checkbox" name="elements[]" value="Ni"> Ni
+  </form>
+  <button onclick="uploadCsv()">Upload CSV</button>
+  <button onclick="viewMap()">View Map</button>
+  <script>
+    function uploadCsv() {
+      var formData = new FormData($('#upload-form')[0]);
+      $.ajax({
+        url: '/upload-csv',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          if (data.fileUrl) {
+            alert('Map generated successfully!');
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+        }
+      });
+    }
+
+    function viewMap() {
+      window.open('/uploads/heatmap.html', '_blank');
+    }
+  </script>
+</body>
+</html>

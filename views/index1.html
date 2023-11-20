@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>토양 오염 지도</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <!-- 지도 출력 영역 -->
+    <div id='map' style="width: 100%; height: 400px;"></div>
+
+    <!-- 데이터 입력 및 추가 버튼 영역 -->
+    <div id="input-box">
+        <input type="text" id="site" placeholder="지점 입력">
+        <input type="text" id="latitude" placeholder="위도 입력">
+        <input type="text" id="longitude" placeholder="경도 입력">
+        <input type="text" id="pop" placeholder="오염물질 입력">
+        <input type="text" id="pop2" placeholder="오염정도 입력">
+
+        <!-- 추가 버튼 -->
+        <button onclick='addData()'>추가</button>
+    </div>
+
+    <!-- 데이터 표시 및 삭제 버튼 영역 -->
+    <div id='data-display'></div>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c326c6a2d20ce50ecfdc81a203a5dce3"></script>
+    <script src="/map.js"></script>
+
+    <script>
+        // 데이터 저장을 위한 배열
+        let data = [];
+        let idCounter = 0;
+
+        data.push({
+            id: idCounter++,
+            opersite: "테스트 지점 1",
+            latitude: 35.945581,
+            longitude: 126.683075,
+            pollution: "테스트 오염물질 1",
+            level: "테스트 오염정도 1",
+            marker: null, // 마커는 나중에 추가될 것입니다.
+        });
+
+        // 초기로드 시 테스트 데이터 표시
+        displayData();
+
+        // 데이터 추가 함수
+        function addData() {
+            let site = document.getElementById('site').value;
+            let lat = document.getElementById('latitude').value;
+            let lon = document.getElementById('longitude').value;
+            let pop = document.getElementById('pop').value;
+            let pop2 = document.getElementById('pop2').value;
+
+            // 새로운 위치에 대한 마커를 생성합니다.
+            let marker = addMarker(site, lat, lon, pop, pop2);
+
+            // 데이터와 위치 정보(마커) 및 고유 ID 를 함께 저장합니다.
+            data.push({
+                id: idCounter++,
+                opersite: site,
+                latitude: lat,
+                longitude: lon,
+                pollution: pop,
+                level: pop2,
+                marker: marker
+            });
+
+            displayData();
+        }
+
+        // 데이터 삭제 함수
+        function removeData(id) {
+            const index = data.findIndex(item => item.id === id);
+
+            if (index !== -1) {
+                // 지도에서 마커 제거
+                data[index].marker.setMap(null);
+
+                // 배열에서 아이템 제거
+                data.splice(index, 1);
+
+                displayData();
+            } else {
+                alert("유효하지 않은 인덱스입니다.");
+            }
+        }
+
+        // 데이터 표시 함수
+        function displayData() {
+            let displayDiv = document.querySelector('#data-display');
+            displayDiv.innerHTML = ''; // 데이터 표시 영역 초기화
+
+            let table = document.createElement('table');
+            table.innerHTML = '<tr><th>지점</th><th>위도</th><th>경도</th><th>오염물질</th><th>오염정도</th><td></td></tr>';
+            for (let i = 0; i < data.length; i++) {
+                let row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${data[i].opersite}</td>
+                    <td>${data[i].latitude}</td>
+                    <td>${data[i].longitude}</td>
+                    <td>${data[i].pollution}</td>
+                    <td>${data[i].level}</td>
+                    <td><button onclick='removeData(${data[i].id})'>삭제</button></tr>`;
+                table.appendChild(row);
+            }
+            displayDiv.appendChild(table);
+        }
+    </script>
+</body>
+</html>
