@@ -1,3 +1,4 @@
+<!-- index5.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +9,25 @@
   <h2>Upload CSV File</h2>
   <form id="upload-form" enctype="multipart/form-data">
     Select CSV file to upload:
-    <input type="file" name="csvfile">
+    <input type="file" name="csvfile"><br>
+    <input type="checkbox" name="columns" value="Cd"> Cd<br>
+    <input type="checkbox" name="columns" value="Cu"> Cu<br>
+    <input type="checkbox" name="columns" value="As"> As<br>
+    <input type="checkbox" name="columns" value="Pb"> Pb<br>
+    <input type="checkbox" name="columns" value="Zn"> Zn<br>
+    <input type="checkbox" name="columns" value="Ni"> Ni<br>
   </form>
   <button onclick="uploadCsv()">Upload CSV</button>
   <button onclick="viewMap()">View Map</button>
   <script>
+    $('input[type="checkbox"]').on('change', function() {
+      $('input[type="checkbox"]').not(this).prop('checked', false);  
+    });
+
     function uploadCsv() {
       var formData = new FormData($('#upload-form')[0]);
+      formData.append('selectedColumns', $('input[name="columns"]:checked').map(function() { return this.value; }).get().join(','));
+      
       $.ajax({
         url: '/upload-csv',
         type: 'POST',
@@ -33,7 +46,7 @@
     }
 
     function viewMap() {
-      window.open('http://www.ksnu-bi.kro.kr:8080/heatmap11.html', '_blank');
+      window.open('http://203.234.55.138/heatmap.html', '_blank');
     }
   </script>
 </body>

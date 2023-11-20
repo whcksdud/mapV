@@ -26,11 +26,11 @@ app.get('/', (req, res) => {
 
 app.post('/upload-csv', upload.single('csvfile'), (req, res) => {
   const options = {
-    args: [req.file.path],
+    args: [req.file.path, req.body.selectedColumns],
   };
   PythonShell.run('generate_map.py', options, function (err, result) {
     if (err) throw err;
-    res.json({ fileUrl: '/heatmap11.html' });
+    res.json({ fileUrl: '/heatmap.html' });
   });
 });
 
