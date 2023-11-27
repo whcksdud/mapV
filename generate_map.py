@@ -5,10 +5,10 @@ import folium
 from folium.plugins import HeatMap
 from folium import CircleMarker, Popup
 
-csv_file_path = sys.argv[1]
+json_file_path = sys.argv[1]
 selected_columns = sys.argv[2].split(',')
 
-data = pd.read_csv(csv_file_path, encoding='cp949')
+data = pd.read_json(json_file_path, encoding='utf8')
 
 m = folium.Map(location=[data['위도'].mean(), data['경도'].mean()], zoom_start=15)
 
@@ -25,4 +25,4 @@ for index, row in data.iterrows():
     circle_marker = CircleMarker(location=[row['위도'], row['경도']], radius=2, color='blue', fill=True, fill_color='blue', fill_opacity=0.5, popup=Popup(popup_text, max_width=200))
     circle_marker.add_to(m)
 m.add_child(folium.LatLngPopup())
-m.save('heatmap.html')
+m.save('./heatmap.html')
