@@ -98,8 +98,3 @@ with open('Data.json', 'w', encoding='utf-8') as file:
 
 **CSV 파일을 데이터 프레임을 통해 CSV 파일을 JSON 형태로 변경** 
 
-### 3**.1  히트맵 열기**
-
-![image](https://github.com/whcksdud/mapV/assets/67512185/99591017-6ff8-4142-a7a2-9da47c207ae2)
-
-**index.html - 49번째 라인의 주소를 본인 서버주소로 변경해야함**
