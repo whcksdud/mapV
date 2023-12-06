@@ -34,5 +34,4 @@ file_name = f'./{uuid_str}.html'
 m.save(file_name)
 
 
-# file_name을 표준 출력에 출력
 print(file_name)
